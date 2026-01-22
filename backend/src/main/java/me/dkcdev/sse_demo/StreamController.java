@@ -3,8 +3,10 @@ package me.dkcdev.sse_demo;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +31,24 @@ public class StreamController {
         writer.close();
     }
 
+    @GetMapping(value = "/stream2", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter stream2() {
 
+        SseEmitter emitter = new SseEmitter();
+
+        new Thread(() -> {
+            try {
+                for (int i = 10; i >= 0; i--) {
+                    emitter.send("msg " + i);
+                    Thread.sleep(1000);
+                }
+                emitter.complete();
+            } catch (Exception e) {
+                emitter.completeWithError(e);
+            }
+        }).start();
+
+        return emitter;
+    }
 
 }
