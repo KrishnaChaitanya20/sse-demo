@@ -2,6 +2,7 @@ package me.dkcdev.sse_demo;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.Duration;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import reactor.core.publisher.Flux;
 
 @RestController
 public class StreamController {
@@ -49,6 +51,13 @@ public class StreamController {
         }).start();
 
         return emitter;
+    }
+
+    @GetMapping("/stream3")
+    public Flux<String> stream3() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .take(11)
+                .map(i -> "msg " + (10 - i));
     }
 
 }
