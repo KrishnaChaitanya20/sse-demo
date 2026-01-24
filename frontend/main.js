@@ -17,4 +17,5 @@ function startStream(i) {
 document.addEventListener("DOMContentLoaded", () => {
   startStream("1");
   startStream("2");
+  startStream("3");
 });
