@@ -1,0 +1,51 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.my-msg{
+    max-width: 60%;
+    width: max-content;
+    background: #ccc;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+}
+
+.msg{
+    max-width: 60%;
+    width: max-content;
+    background: #eee;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    margin-right: auto;
+}
+
+.inputs{
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    margin-top: 1em;
+}
+
+.messages{
+    width: 100%;
+    /* min-height: 100vh; */
+    flex: 1;
+    margin-top: 2em;
+    background: #aaa;
+}
+
+#messageInput{
+    width: 80%;
+    padding: 0.5em;
+    margin-top: 1em;
+}
+
+
+
