@@ -1,7 +1,6 @@
 package me.dkcdev.sse_demo;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.http.MediaType;
