@@ -19,43 +19,55 @@ import reactor.core.publisher.Flux;
 @RestController
 public class ChatController {
 
-    private final Map<String, ChatRoom> chatRooms = new ConcurrentHashMap<>();
+	private final Map<String, ChatRoom> chatRooms = new ConcurrentHashMap<>();
 
-    @GetMapping(value = "/chat/{chatId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ServerSentEvent<ChatMsg>> chat(
-            @PathVariable String chatId,
-            @RequestParam String userId) {
-        
-        System.out.println("User " + userId + " connected to chat " + chatId);
-        // create chat room if not present
-        ChatRoom room = chatRooms.computeIfAbsent(
-                chatId,
-                id -> new ChatRoom(id));
+	@GetMapping(value = "/chat/{chatId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public Flux<ServerSentEvent<ChatMsg>> chat(
+			@PathVariable String chatId,
+			@RequestParam String userId) {
 
-        room.getUsers().add(userId);
+		System.out.println("User " + userId + " connected to chat " + chatId);
+		// create chat room if not present
+		ChatRoom room = chatRooms.computeIfAbsent(
+				chatId,
+				id -> new ChatRoom(id));
 
-        return room.getSink()
-                .asFlux()
-                .doOnCancel(() -> room.getUsers().remove(userId));
-    }
+		if (!room.getUsers().contains(userId)) {
+			room.getUsers().add(userId);
+		}
 
-    /**
-     * Send a message to all subscribers
-     */
-    @PostMapping("/msg/{chatId}")
-    public void sendMessage(
-            @PathVariable String chatId,
-            @RequestBody ChatMsg msg) {
+		room.getSink().tryEmitNext(
+				ServerSentEvent.<ChatMsg>builder()
+						.event("message")
+						.data(new ChatMsg("System", userId + " joined the chat"))
+						.build());
 
-        ChatRoom room = chatRooms.get(chatId);
-        if (room == null) return;
-        if(!room.getUsers().contains(msg.getUserId())) return;
-        room.getSink().tryEmitNext(
-            ServerSentEvent.<ChatMsg>builder()
-                .event("message")
-                .data(msg)
-                .build()
-        );
-    }
+		return room.getSink()
+				.asFlux()
+				.doOnCancel(() -> {
+					room.getUsers().remove(userId);
+					System.out.println("User " + userId + " disconnected from chat " + chatId);
+				});
+	}
+
+	/**
+	 * Send a message to all subscribers
+	 */
+	@PostMapping("/msg/{chatId}")
+	public void sendMessage(
+			@PathVariable String chatId,
+			@RequestBody ChatMsg msg) {
+
+		ChatRoom room = chatRooms.get(chatId);
+		if (room == null)
+			return;
+		if (!room.getUsers().contains(msg.getUserId()))
+			return;
+		room.getSink().tryEmitNext(
+				ServerSentEvent.<ChatMsg>builder()
+						.event("message")
+						.data(msg)
+						.build());
+	}
 
 }
