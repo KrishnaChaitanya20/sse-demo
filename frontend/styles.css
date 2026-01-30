@@ -1,38 +1,16 @@
+/* <-------------------------- Global Style --------------------------> */
 html, body {
   height: 100%;
   margin: 0;
 }
 
+/* <-------------------------- Layout -------------------------------> */
 body {
   display: flex;
   flex-direction: column;
 }
 
-.my-msg{
-    max-width: 60%;
-    width: max-content;
-    background: #ccc;
-    padding: 0.5em;
-    margin-bottom: 0.5em;
-    margin-left: auto;
-}
-
-.msg{
-    max-width: 60%;
-    width: max-content;
-    background: #eee;
-    padding: 0.5em;
-    margin-bottom: 0.5em;
-    margin-right: auto;
-}
-
-.inputs{
-    display: flex;
-    gap: 1em;
-    align-items: center;
-    margin-top: 1em;
-}
-
+/* <-------------------------- Messages Container -------------------> */
 .messages{
     width: 100%;
     /* min-height: 100vh; */
@@ -41,11 +19,66 @@ body {
     background: #aaa;
 }
 
+/* <-------------------------- Message Bubbles -----------------------> */
+.msg{
+    max-width: 60%;
+    width: max-content;
+    background: #eee;
+    padding: 0.5em;
+    border-radius: min(20px,10%);
+}
+
+.user {
+    font-weight: bold;
+    margin-bottom: 0.2em;
+}
+
+.me {
+    margin: 0.5em 0.5em 0.5em auto;
+}
+
+.other{
+    margin: 0.5em auto 0.5em 0.5em;
+}
+
+.system {
+    text-align: center;
+    font-style: italic;
+    color: #555;
+    margin: 1em auto;
+}
+
+
+/* <-------------------------- Input Area ----------------------------> */
+.inputs{
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    margin-top: 1em;
+}
+
+@media (max-width: 400px) {
+    .inputs {
+        flex-direction: column;
+        gap: 0.5em;
+    }
+}
 #messageInput{
     width: 80%;
     padding: 0.5em;
     margin-top: 1em;
 }
 
+/* <-------------------------- Buttons -------------------------------> */
+button{
+    padding: 0.5em 1em;
+    margin-top: 1em;
+    clip-path: polygon(0% 20%, 60% 20%, 60% 0%, 100% 50%, 60% 100%, 60% 80%, 0% 80%);
+    color: white;
+    background: #000;
+}
 
-
+button:focus{
+    outline: white auto 1px;
+    scale: 1.1;
+}
