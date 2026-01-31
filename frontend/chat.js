@@ -24,10 +24,11 @@ function enableJoin() {
 }
 
 function getMsg(msg, userId) {
-  return `<div class='msg other'>
-            <div class='user'>${userId}</div>
-            ${msg}
-          </div>`;
+  return `<div
+          class="msg other max-w-[60%] md:max-w-[50%] mb-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg rounded-tl-none px-4 w-max">
+          <div class="user text-cyan-400 text-sm font-medium mb-1">${userId}</div>
+          ${msg}
+        </div>`;
 }
 
 function connectToChatServer(chatId, userId) {
@@ -41,7 +42,10 @@ function connectToChatServer(chatId, userId) {
     const data = JSON.parse(event.data);
     if (data.userId === userId) return;
     if (data.userId === "System") {
-      messagesDiv.innerHTML += `<div class='msg system'> ${data.msg}</div>`;
+      messagesDiv.innerHTML += `<div
+          class="msg system mx-auto max-w-[80%] mb-3 bg-purple-500/10 backdrop-blur-sm border border-purple-400/30 rounded-full px-4 py-1.5 w-max text-purple-300 text-sm text-center">
+          ${data.msg} 
+        </div>`;
     } else {
       messagesDiv.innerHTML += getMsg(data.msg, data.userId);
     }
@@ -100,10 +104,14 @@ function sendMessage() {
       msg: inputField.value,
     }),
   });
-  messagesDiv.innerHTML += `<div class='msg me'>
-                            <div class='user'>${userId}</div>
-                            ${inputField.value}
-                            </div>`;
+  messagesDiv.innerHTML += `<div
+          class="msg me max-w-[60%] md:max-w-[50%] mb-3 ml-auto bg-fuchsia-500/20 backdrop-blur-sm border border-fuchsia-400/40 rounded-lg rounded-tr-none px-4 w-max">
+          <div
+            class="user text-fuchsia-300 text-sm font-medium mb-1 text-right">
+            ME
+          </div>
+          ${inputField.value}
+        </div>`;
   // messagesDiv.innerHTML += `<div class='msg'>${inputField.value}</div>`;
   inputField.value = "";
 }
