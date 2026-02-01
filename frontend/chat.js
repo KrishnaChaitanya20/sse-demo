@@ -78,11 +78,27 @@ function joinChat() {
   disableJoin();
 }
 
-function leaveChat() {
-  if (eventSource) {
-    eventSource.close();
-    console.log("Disconnected from chat");
-    enableJoin();
+async function leaveChat() {
+
+  const chatIdVal = chatId.value;
+  const userIdVal = userId.value;
+
+  const res = await fetch(`${BACKEND_URL}/leave/${chatIdVal}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({userId: userIdVal}),
+  });
+
+  if(res.status == 204) { 
+    if (eventSource) {
+      eventSource.close();
+      console.log("Disconnected from chat");
+      enableJoin();
+    }
+  } else if( res.status === 404) {
+    console.error("Chat not found");
   }
 }
 
