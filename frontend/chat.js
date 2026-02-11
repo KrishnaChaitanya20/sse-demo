@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://api.dkcdev.me";
+const BACKEND_URL = "http://localhost:8080";
 
 const chatId = document.getElementById("chatId");
 const userId = document.getElementById("userId");
